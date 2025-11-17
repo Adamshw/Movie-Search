@@ -12,9 +12,9 @@ function App() {
   const [isLoadingResults, setIsLoadingResults] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const skipSuggestionsRef = useRef(false);
 
+  const skipSuggestionsRef = useRef(false);
+  console.log("results", results);
 
   const runSearch = useCallback(async (term?: string) => {
     const searchTerm = (term ?? query).trim();
@@ -60,6 +60,7 @@ function App() {
 
     if (trimmed.length < 2) {
       setSuggestions([]);
+      setResults([]);
       setIsLoadingSuggestions(false);
       return;
     }
