@@ -13,12 +13,19 @@ function App() {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // to skip one suggestions fetch after user selects a suggestion
   const skipSuggestionsRef = useRef(false);
-  console.log("results", results);
+  const lastSearchedQueryRef = useRef("");
 
+  // Execute a search when user submits form or picks a suggestion
   const runSearch = useCallback(async (term?: string) => {
     const searchTerm = (term ?? query).trim();
     if (!searchTerm) return;
+
+    // Avoid redundant searches/ API calls when the query hasn't changed
+    if (searchTerm === lastSearchedQueryRef.current) {
+      return;
+    }
 
     setIsLoadingResults(true);
     setError(null);
@@ -26,6 +33,7 @@ function App() {
     try {
       const movies = await searchMovies(searchTerm);
       setResults(movies);
+      lastSearchedQueryRef.current = searchTerm;
     } catch (err) {
       console.error(err);
       setError(
@@ -50,6 +58,8 @@ function App() {
     void runSearch(movie.name);
   }, [runSearch]);
 
+
+  // Autocomplete suggestions (debounced on query change)
   useEffect(() => {
     const trimmed = query.trim();
 
@@ -82,7 +92,7 @@ function App() {
 
     return () => {
       window.clearTimeout(timeoutId);
-      abortController.abort();
+      abortController.abort(); // Handles unmount and rapid query changes
     };
   }, [query]);
 

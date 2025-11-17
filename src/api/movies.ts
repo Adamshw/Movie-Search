@@ -23,6 +23,10 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+/**
+ * Search movies by query string.
+ * GET /api/movies?q=<query>
+ */
 
 export async function searchMovies(
   query: string,

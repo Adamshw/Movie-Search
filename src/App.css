@@ -193,7 +193,7 @@
   margin: 0;
 }
 
-/* Basic responsiveness */
+
 @media (max-width: 640px) {
   .result-card {
     flex-direction: column;
