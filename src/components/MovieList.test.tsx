@@ -49,34 +49,36 @@ describe('MovieList', () => {
         expect(screen.getByText(/thief who steals secrets/i)).toBeInTheDocument();
     });
 
+    it('should display release years', () => {
+        render(<MovieList movies={mockMovies} />);
+
+        expect(screen.getByText(/1999/)).toBeInTheDocument();
+        expect(screen.getByText(/2010/)).toBeInTheDocument();
+    });
+
+    it('should render thumbnail when available', () => {
+        render(<MovieList movies={mockMovies} />);
+
+        const img = screen.getByAltText('The Matrix poster');
+        expect(img).toBeInTheDocument();
+        expect(img).toHaveAttribute('src', 'https://example.com/matrix.jpg');
+        expect(img).toHaveAttribute('loading', 'lazy');
+    });
+
+    it('should not render thumbnail when not available', () => {
+        render(<MovieList movies={mockMovies} />);
+
+        expect(screen.queryByAltText('Inception poster')).not.toBeInTheDocument();
+    });
+
+    it('should render empty list', () => {
+        render(<MovieList movies={[]} />);
+
+        const list = screen.getByRole('list');
+        expect(list).toBeInTheDocument();
+        expect(list.children).toHaveLength(0);
+    });
+
+
 });
 
-it('should display release years', () => {
-    render(<MovieList movies={mockMovies} />);
-
-    expect(screen.getByText(/1999/)).toBeInTheDocument();
-    expect(screen.getByText(/2010/)).toBeInTheDocument();
-});
-
-it('should render thumbnail when available', () => {
-    render(<MovieList movies={mockMovies} />);
-
-    const img = screen.getByAltText('The Matrix poster');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'https://example.com/matrix.jpg');
-    expect(img).toHaveAttribute('loading', 'lazy');
-});
-
-it('should not render thumbnail when not available', () => {
-    render(<MovieList movies={mockMovies} />);
-
-    expect(screen.queryByAltText('Inception poster')).not.toBeInTheDocument();
-});
-
-it('should render empty list', () => {
-    render(<MovieList movies={[]} />);
-
-    const list = screen.getByRole('list');
-    expect(list).toBeInTheDocument();
-    expect(list.children).toHaveLength(0);
-});
