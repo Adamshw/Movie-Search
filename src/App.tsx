@@ -15,25 +15,22 @@ function App() {
 
   // to skip one suggestions fetch after user selects a suggestion
   const skipSuggestionsRef = useRef(false);
-  const lastSearchedQueryRef = useRef("");
+
 
   // Execute a search when user submits form or picks a suggestion
   const runSearch = useCallback(async (term?: string) => {
+
     const searchTerm = (term ?? query).trim();
     if (!searchTerm) return;
-
-    // Avoid redundant searches/ API calls when the query hasn't changed
-    if (searchTerm === lastSearchedQueryRef.current) {
-      return;
-    }
-
+  
     setIsLoadingResults(true);
     setError(null);
 
     try {
       const movies = await searchMovies(searchTerm);
       setResults(movies);
-      lastSearchedQueryRef.current = searchTerm;
+
+  
     } catch (err) {
       console.error(err);
       setError(
